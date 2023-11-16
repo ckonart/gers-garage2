@@ -25,7 +25,8 @@ public class Client extends User{
     public Client() {
     }
 
-    public Client(String firstName, String lastName, String email, String password, String confirmPassword, String phoneNumber, Gender gender, LocalDate dob, Role role) {
-        super(firstName, lastName, email, password, confirmPassword, phoneNumber, gender, dob, role);
+    public Client(String firstName, String lastName, String email, String password, String confirmPassword, String phoneNumber, Gender gender, String dob, Role role, String img) {
+        super(firstName, lastName, email, password, confirmPassword, phoneNumber, gender, dob, role, img);
     }
 }
+

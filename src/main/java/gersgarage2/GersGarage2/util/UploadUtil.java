@@ -8,16 +8,14 @@ import java.io.FileOutputStream;
 
 public class UploadUtil {
 
-    public static boolean uploadImg(MultipartFile img) {
+    public static String uploadImg(MultipartFile img) {
 
-        boolean successUpload = false;
-
-        if(!img.isEmpty()) {
+        if (!img.isEmpty()) {
             String fileName = img.getOriginalFilename();
-            try{
+            try {
                 String directoryUploadImg = "C:\\Development\\Workspace\\Gers-Garage2\\src\\main\\resources\\static\\img\\imgUploads";
                 File dir = new File(directoryUploadImg);
-                if(!dir.exists()){
+                if (!dir.exists()) {
                     dir.mkdirs();
                 }
                 File serverFile = new File(dir.getAbsolutePath() + File.separator + fileName);
@@ -27,14 +25,17 @@ public class UploadUtil {
                 stream.close();
 
                 System.out.println("stored in: " + serverFile.getAbsolutePath());
-                System.out.println("you made the upload of " + fileName + "with success");
+                System.out.println("you made the upload of " + fileName + " with success");
 
-            } catch (Exception e){
-                System.out.println("upload of " + fileName + "failed. => " + e.getMessage());
+                return serverFile.getAbsolutePath(); // Return the file path
 
+            } catch (Exception e) {
+                System.out.println("upload of " + fileName + " failed. => " + e.getMessage());
             }
-            } else {
+        } else {
             System.out.println("upload failed because the file is empty");
-        } return successUpload;
+        }
+
+        return null; // Return null in case of failure
     }
 }

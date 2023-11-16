@@ -33,6 +33,10 @@ public class MainController {
     public String contact() {
         return "contact";
     }
+    @GetMapping("/support")
+    public String support() {
+        return "support";
+    }
     @GetMapping("/staff")
     public String staff() {
         return "staff";

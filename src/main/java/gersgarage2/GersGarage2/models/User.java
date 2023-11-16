@@ -39,18 +39,21 @@ public abstract class User {
     private Gender gender;
 
     @Column(name = "dob")
-    @DateTimeFormat(pattern = "yyyy-mm-dd")
-    private LocalDate dob;
+    @DateTimeFormat(pattern = "dd-mm-yyyy")
+    private String dob;
 
     @Column(name = "role_type")
     @Enumerated(EnumType.STRING)
     private Role role;
 
+    @Column(name = "img")
+    private String img;
+
 
     public User(){
     }
 
-    public User(String firstName, String lastName, String email, String password, String confirmPassword, String phoneNumber, Gender gender, LocalDate dob, Role role) {
+    public User(String firstName, String lastName, String email, String password, String confirmPassword, String phoneNumber, Gender gender, String dob, Role role, String img) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
@@ -60,6 +63,7 @@ public abstract class User {
         this.gender = gender;
         this.dob = dob;
         this.role = role;
+        this.img = img;
     }
 
     public Integer getId(){
@@ -113,10 +117,10 @@ public abstract class User {
     public void setGender(Gender gender){
         this.gender = gender;
     }
-    public LocalDate getDob(){
+    public String getDob(){
         return dob;
     }
-    public void setDob(LocalDate dob){
+    public void setDob(String dob){
         this.dob = dob;
     }
     public Role getRole(){
@@ -124,5 +128,15 @@ public abstract class User {
     }
     public void setRole(Role role){
         this.role = role;
+    }
+    public String getImg() { return img;}
+    public void setImg(String img) {this.img = img;}
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                '}';
     }
 }

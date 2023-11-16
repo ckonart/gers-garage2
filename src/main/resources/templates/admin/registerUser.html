@@ -75,7 +75,7 @@
 
 <!-- Navbar Start -->
 <nav class="navbar navbar-expand-lg bg-white navbar-light shadow sticky-top p-0">
-    <a href="index.html" class="navbar-brand d-flex align-items-center px-4 px-lg-5">
+    <a href="../index.html" class="navbar-brand d-flex align-items-center px-4 px-lg-5">
         <h2 class="m-0 text-primary"><i class="fa fa-car me-3"></i>Ger's Garage</h2>
     </a>
     <button type="button" class="navbar-toggler me-4" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
@@ -115,7 +115,7 @@
                 </div>
             </div>
         </div>
-        <a th:href="@{/login}" class="btn btn-primary py-4 px-lg-5 d-none d-lg-block">Login<i class="fa fa-arrow-right ms-3"></i></a>
+        <a th:href="@{/logout}" class="btn btn-primary py-4 px-lg-5 d-none d-lg-block">Logout<i class="fa fa-arrow-right ms-3"></i></a>
     </div>
 </nav>
 <!-- Navbar End -->
@@ -144,7 +144,7 @@
         [[${message}]]
     </div>
     <h2>Registration Form</h2>
-    <form th:action="@{/registration}" method="post" role="form" th:object="${client}" enctype="multipart/form-data">
+    <form th:action="@{/registration-user}" method="post" role="form" th:object="${user}" enctype="multipart/form-data">
         <div class="form-group">
             <label for="firstName">First name:</label>
             <input th:field="*{firstName}" type="text" id="firstName" name="firstName" placeholder="First Name" required>
@@ -187,6 +187,14 @@
             <label for="img">Profile image</label>
             <input type="file" id="img" name="file" placeholder="Choose file">
         </div>
+        <div class="form-group">
+            <label for="role">Role</label>
+            <select th:field="*{role}" id="role" name="role" required>
+                <option value="ADMIN">Admin</option>
+                <option value="STAFF">Staff</option>
+                <option value="CLIENT">Client</option>
+            </select>
+        </div>
 
         <input type="submit" value="Register">
     </form>
@@ -220,11 +228,11 @@
             </div>
             <div class="col-lg-3 col-md-6">
                 <h4 class="text-light mb-4">Services</h4>
-                <a class="btn btn-link" href="service.html">Annual Service</a>
-                <a class="btn btn-link" href="service.html">Major Service</a>
-                <a class="btn btn-link" href="service.html">Repair</a>
-                <a class="btn btn-link" href="service.html">Major Repair</a>
-                <a class="btn btn-link" href="wash.html">Cleaning</a>
+                <a class="btn btn-link" href="../service.html">Annual Service</a>
+                <a class="btn btn-link" href="../service.html">Major Service</a>
+                <a class="btn btn-link" href="../service.html">Repair</a>
+                <a class="btn btn-link" href="../service.html">Major Repair</a>
+                <a class="btn btn-link" href="../wash.html">Cleaning</a>
             </div>
             <div class="col-lg-3 col-md-6">
                 <h4 class="text-light mb-4">Newsletter</h4>

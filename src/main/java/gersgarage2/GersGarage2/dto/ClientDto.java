@@ -14,10 +14,11 @@ public class ClientDto {
     private String confirmPassword;
     private String phoneNumber;
     private Gender gender;
-    private LocalDate dob;
+    private String dob;
     private Role role;
+    private String img;
 
-    public ClientDto(String firstName, String lastName, String email, String password, String confirmPassword, String phoneNumber, Gender gender, LocalDate dob, Role role) {
+    public ClientDto(String firstName, String lastName, String email, String password, String confirmPassword, String phoneNumber, Gender gender,String dob, Role role, String img) {
         super();
         this.firstName = firstName;
         this.lastName = lastName;
@@ -28,6 +29,7 @@ public class ClientDto {
         this.gender = gender;
         this.dob = dob;
         this.role = role;
+        this.img = img;
     }
 
     public String getFirstName() {
@@ -86,11 +88,11 @@ public class ClientDto {
         this.gender = gender;
     }
 
-    public LocalDate getDob() {
+    public String getDob() {
         return dob;
     }
 
-    public void setDob(LocalDate dob) {
+    public void setDob(String dob) {
         this.dob = dob;
     }
 
@@ -101,4 +103,6 @@ public class ClientDto {
     public void setRole(Role role) {
         this.role = role;
     }
+    public String getImg(){ return img;}
+    public void setImg(String img) {this.img = img;}
 }

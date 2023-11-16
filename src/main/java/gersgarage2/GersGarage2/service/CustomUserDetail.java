@@ -4,16 +4,18 @@ import gersgarage2.GersGarage2.enumerates.Role;
 import gersgarage2.GersGarage2.models.User;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+
+import java.io.Serializable;
 import java.util.Collection;
-import java.util.Collections;
 
-public class CustomUserDetail implements UserDetails {
+public class CustomUserDetail implements UserDetails, Serializable {
 
+    private static final long serialVersionUID = 1L;
     private User user;
 
     public CustomUserDetail(User user){
+
         this.user = user;
     }
 
@@ -35,7 +37,9 @@ public class CustomUserDetail implements UserDetails {
     }
 
 
-    public String getFullName() { return user.getFirstName() + " " + user.getLastName();}
+    public String getFullName() {
+        return user.getFirstName() + " " + user.getLastName();
+    }
 
     @Override
     public boolean isAccountNonExpired() {

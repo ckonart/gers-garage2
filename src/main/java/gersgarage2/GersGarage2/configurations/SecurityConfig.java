@@ -26,6 +26,7 @@ public class SecurityConfig {
 
     @Bean
     public static PasswordEncoder passwordEncoder() {
+
         return new BCryptPasswordEncoder();
     }
 
@@ -35,10 +36,13 @@ public class SecurityConfig {
 
         http.csrf(c -> c.disable())
 
-                .authorizeHttpRequests(request -> request.requestMatchers("/adminpage")
+                .authorizeHttpRequests(request -> request
+                        .requestMatchers("/adminpage", "/profiles", "/deleteClient/**", "/edit-Client", "/editProfilesClients/**", "/listAll-admin", "/deleteAdmin/**", "/edit-Admin", "/editProfilesAdmin/**", "/edit-Staff", "/editProfilesStaff/**", "/deleteStaff/**", "/listAll-staff", "/listAll-clients", "/registration-user")
                         .hasAuthority("ADMIN")
                         .requestMatchers("/userpage")
                         .hasAuthority("CLIENT")
+                        .requestMatchers("/staffpage")
+                        .hasAuthority("STAFF")
                         .requestMatchers("/css/**", "/img/**", "/js/**", "/lib/**", "/scss/**", "/registration", "/", "/about", "/home", "/shop", "/service", "/wash", "/contact", "/staff", "/testimonial")
                         .permitAll())
                         /*.anyRequest().authenticated())*/
