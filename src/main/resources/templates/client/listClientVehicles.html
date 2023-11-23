@@ -180,25 +180,28 @@
     <div class="col-md-12 grid-margin stretch-card">
         <div class="card table-bg">
             <div class="card-people mt-auto">
-                <h4 class="m-4">List of all clients</h4>
+                <h4 class="m-4">List of all vehicles serviced</h4>
                 <table class="table table-striped">
                     <thead>
                     <tr>
-                        <th scope="col">Id</th>
-                        <th scope="col">First name</th>
-                        <th scope="col">Last name</th>
-                        <th scope="col">E-mail</th>
-                        <th scope="col">Actions</th>
+                        <th scope="col">Vehicle type</th>
+                        <th scope="col">Manufacturer</th>
+                        <th scope="col">Model</th>
+                        <th scope="col">Year</th>
+                        <th scope="col">Plate</th>
+                        <th scope="col">Owner</th>
                     </tr>
                     </thead>
                     <tbody>
-                    <tr th:each="client : ${client}">
-                        <td th:text="${client.id}"></td>
-                        <td th:text="${client.firstName}"></td>
-                        <td th:text="${client.lastName}"></td>
-                        <td th:text="${client.email}"></td>
-                        <td><a class="btn btn-warning" th:href="@{editProfilesClients/{id}(id=${client.id})}">EDIT</a>
-                            <a class="btn btn-danger" th:href="@{deleteClient/{id}(id=${client.id})}">DELETE</a></td>
+                    <tr th:each="vehicle : ${vehicle}">
+                        <td th:text="${vehicle.type}"></td>
+                        <td th:text="${vehicle.brand}"></td>
+                        <td th:text="${vehicle.model}"></td>
+                        <td th:text="${vehicle.year}"></td>
+                        <td th:text="${vehicle.plate}"></td>
+                        <td th:text="${vehicle.client != null ? vehicle.client.firstName + ' ' + vehicle.client.lastName : 'N/A'}"></td>
+                        <td><a class="btn btn-warning" th:href="@{editVehicleClient/{id}(id=${vehicle.id})}">EDIT</a>
+                            <a class="btn btn-danger" th:href="@{deleteVehicleClient/{id}(id=${vehicle.id})}">DELETE</a></td>
                     </tr>
                     </tbody>
                 </table>
@@ -221,7 +224,7 @@
             </div>
         </div>
         <div class="text-center mt-5">
-            <a th:href="@{/profiles}" class="btn btn-secondary">Back</a>
+            <a th:href="@{/personalInfo}"  onclick="return confirm('Your changes were not saved. Are you sure you want to go back?');" class="btn btn-secondary mx-auto">Back</a>
         </div>
     </div>
     <div class="col-md-12 grid-margin transparent">"

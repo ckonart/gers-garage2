@@ -1,78 +1,39 @@
-package gersgarage2.GersGarage2.models;
+package gersgarage2.GersGarage2.dto;
 
 import gersgarage2.GersGarage2.enumerates.BookingStatus;
 import gersgarage2.GersGarage2.enumerates.ServiceType;
-import jakarta.persistence.*;
-import org.springframework.format.annotation.DateTimeFormat;
+import gersgarage2.GersGarage2.models.Client;
+import gersgarage2.GersGarage2.models.Staff;
+import gersgarage2.GersGarage2.models.Vehicle;
 
-@Entity
-@Table(name = "Booking")
-public class Booking {
+public class BookingDto {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
-
-    @Column
-    @Enumerated(EnumType.STRING)
     private ServiceType serviceType;
-
-    @Column
-    @Enumerated(EnumType.STRING)
     private BookingStatus status;
-
-    @Column(name = "start_date")
-    @DateTimeFormat(pattern = "dd-mm-yyyy")
     private String dateService;
-    @Column(name = "start_time")
     private String startTime;
-    @Column(name = "details")
     private String details;
-    @Column(name = "cost_Service")
     private Double costService;
-
-    @Column(name = "extra_cost")
     private Double extraCost;
-    @Column(name = "total_cost")
     private Double totalCost;
-
-    @ManyToOne
-    @JoinColumn(name = "id_client_fk")
+    private Staff staff;
     private Client client;
-
-    @ManyToOne
-    @JoinColumn(name = "id_vehicle_fk")
     private Vehicle vehicle;
 
-    @ManyToOne
-    @JoinColumn(name = "id_staff_fk")
-    private Staff staff;
-
-    public Booking() {
-    }
-
-    public Booking(Integer id, ServiceType serviceType, BookingStatus status, String dateService, String startTime, String details, Double costService, Double extraCost, Double totalCost, Client client, Vehicle vehicle, Staff staff) {
-        this.id = id;
+    public BookingDto(ServiceType serviceType, BookingStatus status, String dateService, String startTime, String details, Double costService, Double extraCost, Double totalCost, Client client, Vehicle vehicle, Staff staff) {
         this.serviceType = serviceType;
         this.status = status;
         this.dateService = dateService;
         this.startTime = startTime;
         this.details = details;
-        this.costService = costService;
-        this.extraCost = extraCost;
-        this.totalCost = totalCost;
+        this.costService = 0.0;
+        this.extraCost = 0.0;
+        this.totalCost = 0.0;
         this.client = client;
         this.vehicle = vehicle;
         this.staff = staff;
     }
 
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
 
     public ServiceType getServiceType() {
         return serviceType;
@@ -138,6 +99,14 @@ public class Booking {
         this.totalCost = totalCost;
     }
 
+    public Staff getStaff() {
+        return staff;
+    }
+
+    public void setStaff(Staff staff) {
+        this.staff = staff;
+    }
+
     public Client getClient() {
         return client;
     }
@@ -152,13 +121,5 @@ public class Booking {
 
     public void setVehicle(Vehicle vehicle) {
         this.vehicle = vehicle;
-    }
-
-    public Staff getStaff() {
-        return staff;
-    }
-
-    public void setStaff(Staff staff) {
-        this.staff = staff;
     }
 }

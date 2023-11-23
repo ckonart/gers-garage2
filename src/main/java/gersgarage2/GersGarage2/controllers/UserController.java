@@ -1,28 +1,25 @@
 package gersgarage2.GersGarage2.controllers;
 
 import gersgarage2.GersGarage2.dto.ClientDto;
+import gersgarage2.GersGarage2.dto.VehicleDto;
 import gersgarage2.GersGarage2.enumerates.Role;
-import gersgarage2.GersGarage2.models.Admin;
-import gersgarage2.GersGarage2.models.Client;
-import gersgarage2.GersGarage2.models.Staff;
-import gersgarage2.GersGarage2.repositories.AdminRepository;
-import gersgarage2.GersGarage2.repositories.ClientRepository;
-import gersgarage2.GersGarage2.repositories.StaffRepository;
-import gersgarage2.GersGarage2.service.AdminService;
-import gersgarage2.GersGarage2.service.ClientService;
-import gersgarage2.GersGarage2.service.StaffService;
+import gersgarage2.GersGarage2.models.*;
+import gersgarage2.GersGarage2.repositories.*;
+import gersgarage2.GersGarage2.service.*;
 import gersgarage2.GersGarage2.util.UploadUtil;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.view.RedirectView;
 
+import java.security.Principal;
+import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 
 @Controller
 public class UserController {
@@ -37,9 +34,26 @@ public class UserController {
     private StaffRepository staffRepository;
     @Autowired
     private AdminService adminService;
-
+    @Autowired
+    private UserDetailsService userDetailsService;
     @Autowired
     private AdminRepository adminRepository;
+    @Autowired
+    private BookingService bookingService;
+    @Autowired
+    private BookingRepository bookingRepository;
+    @Autowired
+    private VehicleRepository vehicleRepository;
+    @Autowired
+    private VehicleService vehicleService;
+
+
+    @GetMapping("/adminpage")
+    public String adminpage(Model model, Principal principal) {
+        UserDetails userDetails = userDetailsService.loadUserByUsername(principal.getName());
+        model.addAttribute("user", userDetails);
+        return "admin/adminpage";
+    }
 
     @GetMapping("/registration-user")
     public String getRegistrationPage(@ModelAttribute("user") ClientDto clientDto){
@@ -93,7 +107,7 @@ public class UserController {
     @GetMapping("/listAll-staff")
     public ModelAndView staffList(){
         ModelAndView mv = new ModelAndView("admin/listProfilesStaff");
-        mv.addObject("Staff", staffRepository.findAll());
+        mv.addObject("staff", staffRepository.findAll());
         return mv;
     }
 
@@ -109,7 +123,7 @@ public class UserController {
     @PostMapping("/edit-Staff")
     public ModelAndView editStaff(Staff staff){
         System.out.println("Editing staff: " + staff.toString());
-        ModelAndView mv = new ModelAndView("admin/editProfilesClients");
+        ModelAndView mv = new ModelAndView("redirect:/listAll-staff");
         staffRepository.save(staff);
         return staffList();
     }
@@ -124,7 +138,7 @@ public class UserController {
     @GetMapping("/listAll-clients")
     public ModelAndView clientsList() {
         ModelAndView mv = new ModelAndView("admin/listProfilesClients");
-        mv.addObject("Client", clientRepository.findAll());
+        mv.addObject("client", clientRepository.findAll());
         return mv;
     }
 
@@ -179,6 +193,65 @@ public class UserController {
     public ModelAndView deleteAdmin(@PathVariable("id") Integer id) {
         ModelAndView mv = new ModelAndView("redirect:/listAll-admin");
         adminRepository.deleteById(id);
+        return mv;
+    }
+
+    @GetMapping("/addVehicle")
+    public ModelAndView newVehicle(@ModelAttribute("vehicle") VehicleDto vehicleDto, Model model, Principal principal){
+        ModelAndView mv = new ModelAndView("admin/addVehicleForClient");
+
+        List<Client> clientList = clientRepository.findAll();
+        model.addAttribute("client", clientList);
+
+        String clientEmail = principal.getName();
+        Client client = clientRepository.findByEmail(clientEmail);
+        if(client != null){
+            List<Booking> bookingList = bookingRepository.findByClient(client);
+            mv.addObject("bookingList", bookingList);
+        } else {
+            mv.addObject("bookingList", Collections.emptyList());
+        }
+        return mv;
+    }
+
+    @PostMapping("/new-Vehicle")
+    public ModelAndView saveNewVehicle(@ModelAttribute("vehicle") VehicleDto vehicleDto, Model model) {
+        ModelAndView mv = new ModelAndView("admin/addVehicleForClient");
+        vehicleService.save(vehicleDto);
+        mv.addObject("message", "Registered successfully!");
+
+        return mv;
+    }
+    @GetMapping("/listClientVehicles")
+    public ModelAndView vehicleListClient(){
+        ModelAndView mv = new ModelAndView("client/listClientVehicles");
+        mv.addObject("vehicle", vehicleRepository.findAll());
+        return mv;
+    }
+    @GetMapping("/editVehicle/{id}")
+    public ModelAndView editVehicles(@PathVariable("id") Integer id, Model model) {
+        ModelAndView mv = new ModelAndView("admin/editVehicle");
+        Vehicle vehicle = vehicleRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Vehicle not found"));
+
+        List<Client> clientList = clientRepository.findAll();
+        model.addAttribute("client", clientList);
+
+        mv.addObject("vehicle", vehicle);
+        return mv;
+    }
+
+    @PostMapping("/editVehicle")
+    public ModelAndView saveEditVehicles(Vehicle vehicle){
+        System.out.println("Editing vehicle: " + vehicle.toString());
+        ModelAndView mv = new ModelAndView("admin/editVehicle");
+        vehicleRepository.save(vehicle);
+        return mv;
+    }
+    @GetMapping("/deleteVehicle/{id}")
+    public ModelAndView deleteVehicle(@PathVariable("id") Integer id) {
+        ModelAndView mv = new ModelAndView("redirect:/listVehicles");
+        vehicleRepository.deleteById(id);
         return mv;
     }
 }

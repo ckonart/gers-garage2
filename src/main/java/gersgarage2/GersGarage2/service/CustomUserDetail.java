@@ -37,6 +37,7 @@ public class CustomUserDetail implements UserDetails, Serializable {
     }
 
 
+
     public String getFullName() {
         return user.getFirstName() + " " + user.getLastName();
     }

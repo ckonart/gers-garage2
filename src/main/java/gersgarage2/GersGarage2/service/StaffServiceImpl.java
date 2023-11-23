@@ -30,15 +30,4 @@ public class StaffServiceImpl implements StaffService {
         return staff;
     }
 
-    @Override
-    public List<Staff> getStaffByRole(String role) {
-        List<Staff> staff = staffRepository.findByRole(role);
-        return staff;
-    }
-
-    /*@Override
-    public List<Staff> getStaffByName(String firstName) {
-        List<Staff> staff = staffRepository.findByName(firstName);
-        return staff;
-    }*/
 }

@@ -176,9 +176,6 @@
 
 <!-- Service Start -->
 <div class="container">
-    <div class="message" th:if="${message != null}">
-        [[${message}]]
-    </div>
     <h2>Edit Form</h2>
     <form th:action="@{/edit-Client}" method="post" role="form" th:object="${client}" enctype="multipart/form-data">
         <input type="hidden" th:field="*{id}">

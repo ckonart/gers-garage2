@@ -13,7 +13,4 @@ public interface StaffService {
 
     List<Staff> getAllStaff();
 
-    List<Staff> getStaffByRole(String role);
-
-    /*List<Staff> getStaffByName(String firstName);*/
 }

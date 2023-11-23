@@ -175,7 +175,7 @@
 
 
     <div class="header">
-        <h1>User Dashboard</h1>
+        <h1>Client Dashboard</h1>
     </div>
     <div class="container">
         <h2>Welcome, [[${user.getFullName}]]</h2>
@@ -200,7 +200,7 @@
                         <div class="ps-4">
                             <h5 class="mb-3">Personal information</h5>
                             <p style="text-align: justify;">Keep your personal information updated here!</p>
-                            <a class="text-secondary border-bottom" href="">Read more</a>
+                            <a class="text-secondary border-bottom" th:href="@{/personalInfo}">Read more</a>
                         </div>
                     </div>
                 </div>
@@ -208,9 +208,9 @@
                     <div class="d-flex bg-light py-5 px-4">
                         <i class="fa fa-users-cog fa-3x text-primary flex-shrink-0"></i>
                         <div class="ps-4">
-                            <h5 class="mb-3">Your bookings</h5>
-                            <p style="text-align: justify;">See your record of services with us!</p>
-                            <a class="text-secondary border-bottom" href="">Read More</a>
+                            <h5 class="mb-3">Services</h5>
+                            <p style="text-align: justify;">Book a service or see your record of services with us!</p>
+                            <a class="text-secondary border-bottom" th:href="@{/bookingPage-Client}">Read More</a>
                         </div>
                     </div>
                 </div>
@@ -220,7 +220,7 @@
                         <div class="ps-4">
                             <h5 class="mb-3">Complaints or suggestions?</h5>
                             <p style="text-align: justify;">Something it is still wrong or have some good words us? Please let us know!</p>
-                            <a class="text-secondary border-bottom" href="">Read More</a>
+                            <a class="text-secondary border-bottom" th:href="@{/support}">Read More</a>
                         </div>
                     </div>
                 </div>

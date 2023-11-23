@@ -229,7 +229,7 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <tr th:each="staff : ${Staff}">
+                    <tr th:each="staff : ${staff}">
                         <td th:text="${staff.id}"></td>
                         <td th:text="${staff.firstName}"></td>
                         <td th:text="${staff.lastName}"></td>
@@ -256,6 +256,9 @@
                     </ul>
                 </nav>
             </div>
+        </div>
+        <div class="text-center mt-5">
+            <a th:href="@{/profiles}" class="btn btn-secondary">Back</a>
         </div>
     </div>
     <div class="col-md-12 grid-margin transparent">"

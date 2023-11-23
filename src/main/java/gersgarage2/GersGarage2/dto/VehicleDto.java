@@ -1,64 +1,27 @@
-package gersgarage2.GersGarage2.models;
+package gersgarage2.GersGarage2.dto;
 
 import gersgarage2.GersGarage2.enumerates.*;
-import jakarta.persistence.*;
+import gersgarage2.GersGarage2.models.Booking;
+import gersgarage2.GersGarage2.models.Client;
 
 import java.util.List;
 
-@Entity
-@Table(name = "Vehicle")
-public class Vehicle {
+public class VehicleDto {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Integer id;
-
-    @Column(name = "model")
     private String model;
-
-    @Enumerated(EnumType.STRING)
-    @Column(name = "brand")
     private CarMaker brand;
-
-    @Enumerated(EnumType.STRING)
-    @Column(name = "color")
     private Color color;
-
-    @Column(name = "year")
     private Integer year;
-
-    @Enumerated(EnumType.STRING)
-    @Column(name = "type")
     private TypeVehicle type;
-
-    @Enumerated(EnumType.STRING)
-    @Column(name = "engine_size")
     private EngineSize engineSize;
-
-    @Enumerated(EnumType.STRING)
-    @Column(name = "fuel")
     private Fuel fuel;
-
-    @Column(name = "plate")
     private String plate;
-
-    @Column(name = "mileage")
     private Integer mileage;
-
-    @Column(name = "details")
     private String details;
-
-    @ManyToOne
-    @JoinColumn(name = "id_client_fk")
     private Client client;
-
-    @OneToMany(mappedBy = "vehicle")
     private List<Booking> bookingList;
 
-    public Vehicle() {
-    }
-
-    public Vehicle(TypeVehicle type, CarMaker brand, String model, Color color, Integer year,  EngineSize engineSize, Fuel fuel, String plate, Integer mileage, String details, Client client, List<Booking> bookingList) {
+    public VehicleDto(String model, CarMaker brand, Color color, Integer year, TypeVehicle type, EngineSize engineSize, Fuel fuel, String plate, Integer mileage, String details, Client client, List<Booking> bookingList) {
         this.model = model;
         this.brand = brand;
         this.color = color;
@@ -73,13 +36,6 @@ public class Vehicle {
         this.bookingList = bookingList;
     }
 
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
 
     public String getModel() {
         return model;

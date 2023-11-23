@@ -18,4 +18,6 @@ public class Staff extends User{
     public Staff(String firstName, String lastName, String email, String password, String confirmPassword, String phoneNumber, Gender gender, String dob, Role role, String img) {
         super(firstName, lastName, email, password, confirmPassword, phoneNumber, gender, dob, role, img);
     }
+
+
 }

@@ -39,7 +39,7 @@ public abstract class User {
     private Gender gender;
 
     @Column(name = "dob")
-    @DateTimeFormat(pattern = "dd-mm-yyyy")
+        @DateTimeFormat(pattern = "dd-mm-yyyy")
     private String dob;
 
     @Column(name = "role_type")

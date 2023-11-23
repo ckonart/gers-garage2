@@ -37,9 +37,16 @@ public class SecurityConfig {
         http.csrf(c -> c.disable())
 
                 .authorizeHttpRequests(request -> request
-                        .requestMatchers("/adminpage", "/profiles", "/deleteClient/**", "/edit-Client", "/editProfilesClients/**", "/listAll-admin", "/deleteAdmin/**", "/edit-Admin", "/editProfilesAdmin/**", "/edit-Staff", "/editProfilesStaff/**", "/deleteStaff/**", "/listAll-staff", "/listAll-clients", "/registration-user")
+                        .requestMatchers("/adminpage", "/services", "/addBooking", "/new-Booking", "/listBookings", "/editBookings/**", "/deleteBookings/**",
+                                "/profiles", "/registration-user", "/deleteClient/**", "/edit-Client", "/editProfilesClients/**", "/listAll-clients",
+                                "/listAll-admin", "/deleteAdmin/**", "/edit-Admin", "/editProfilesAdmin/**",
+                                "/edit-Staff", "/editProfilesStaff/**", "/deleteStaff/**", "/listAll-staff",
+                                "/addVehicle", "/new-Vehicle", "/listVehicle", "/editVehicle", "/editVehicle/**", "/deleteVehicle/**"
+                                )
                         .hasAuthority("ADMIN")
-                        .requestMatchers("/userpage")
+                        .requestMatchers("/userpage", "/registration-client", "/bookingPage-Client", "/personalInfo", "/addBooking-Client", "/new-BookingClient", "/editBooking-Client", "/deleteBooking-Client/**", "/listBooking-Client",
+                                "/editClientProfile/**", "/edit-ClientProfile", "/editClientPassword/**", "/edit-ClientPassword",
+                                "/addVehicles-Client", "/new-VehicleClient", "/listClientVehicles", "/editVehicleClient/**", "/editVehicleClient", "/deleteVehicleClient/**", "/listInvoicesClients")
                         .hasAuthority("CLIENT")
                         .requestMatchers("/staffpage")
                         .hasAuthority("STAFF")

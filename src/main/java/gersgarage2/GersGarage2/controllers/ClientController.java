@@ -1,45 +1,70 @@
 package gersgarage2.GersGarage2.controllers;
 
 import gersgarage2.GersGarage2.dto.ClientDto;
+import gersgarage2.GersGarage2.dto.VehicleDto;
+import gersgarage2.GersGarage2.enumerates.Role;
+import gersgarage2.GersGarage2.models.Booking;
+import gersgarage2.GersGarage2.models.Client;
+import gersgarage2.GersGarage2.models.Vehicle;
+import gersgarage2.GersGarage2.repositories.BookingRepository;
+import gersgarage2.GersGarage2.repositories.ClientRepository;
+import gersgarage2.GersGarage2.repositories.VehicleRepository;
 import gersgarage2.GersGarage2.service.ClientService;
+import gersgarage2.GersGarage2.service.VehicleService;
 import gersgarage2.GersGarage2.util.UploadUtil;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.ModelAndView;
 
 import java.security.Principal;
+import java.util.Collections;
+import java.util.List;
 
 @Controller
 public class ClientController {
 
     @Autowired
     private ClientService clientService;
-
     @Autowired
     private UserDetailsService userDetailsService;
+    @Autowired
+    private ClientRepository clientRepository;
+    @Autowired
+    private VehicleRepository vehicleRepository;
+    @Autowired
+    private VehicleService vehicleService;
+    @Autowired
+    private BookingRepository bookingRepository;
+
+
+    @GetMapping("/login")
+    public String login() {
+        return "login";
+    }
 
     @GetMapping("/registration")
     public String getRegistrationPage(@ModelAttribute("client") ClientDto clientDto){
-        return "register";
+        clientDto.setRole(Role.CLIENT);
+        return "/register";
     }
 
     @PostMapping("/registration")
-    public String saveClient(@ModelAttribute("client") ClientDto clientDto, Model model, @RequestParam("file")MultipartFile file){
+    public ModelAndView saveUser(@ModelAttribute("client") ClientDto clientDto, @RequestParam("file") MultipartFile file) {
+        ModelAndView mv = new ModelAndView("/register");
 
         String imgFilePath = UploadUtil.uploadImg(file);
 
         if (imgFilePath != null) {
             clientDto.setImg(file.getOriginalFilename());
-            model.addAttribute("message", "File upload successfully");
+            mv.addObject("message", "File upload successfully");
         } else {
-            model.addAttribute("message", "File upload failed");
+            mv.addObject("message", "File upload failed");
         }
 
         clientService.save(clientDto);
@@ -54,34 +79,144 @@ public class ClientController {
         System.out.println("Gender: " + clientDto.getGender());
         System.out.println("Dob: " + clientDto.getDob());
         System.out.println("Img: " + clientDto.getImg());
+        System.out.println("Role: " + clientDto.getRole());
 
-        model.addAttribute("message", "Registered successfully!");
-        return "register";
-    }
+        mv.addObject("message", "Registered successfully!");
 
-    @GetMapping("/login")
-    public String login() {
-        return "login";
+        return mv;
     }
 
     @GetMapping("/userpage")
     public String userpage(Model model, Principal principal) {
         UserDetails userDetails = userDetailsService.loadUserByUsername(principal.getName());
         model.addAttribute("user", userDetails);
-        return "user/userpage";
+        return "client/userpage";
     }
 
-    @GetMapping("/adminpage")
-    public String adminpage(Model model, Principal principal) {
-        UserDetails userDetails = userDetailsService.loadUserByUsername(principal.getName());
-        model.addAttribute("user", userDetails);
-        return "admin/adminpage";
+    @GetMapping("/personalInfo")
+    public String personalInfo(Model model, Principal principal){
+        String username = principal.getName();
+        Client client = clientRepository.findByEmail(username);
+        model.addAttribute("client", client);
+
+        return "client/personalInfo";
     }
 
-    @GetMapping("/staffpage")
-    public String staffpage(Model model, Principal principal) {
-        UserDetails userDetails = userDetailsService.loadUserByUsername(principal.getName());
-        model.addAttribute("user", userDetails);
-        return "staff/staffpage";
+    @GetMapping("/bookingPage-Client")
+    public String bookingPageClient(Model model, Principal principal){
+        String username = principal.getName();
+        Client client = clientRepository.findByEmail(username);
+        model.addAttribute("client", client);
+
+        return "client/bookingPage-Client";
     }
+
+    @GetMapping("/editClientProfile/{id}")
+    public ModelAndView editClient(@PathVariable("id") Integer id) {
+        ModelAndView mv = new ModelAndView("client/editClientProfile");
+        Client client = clientRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Client not found"));
+        mv.addObject("password", client.getPassword());
+        mv.addObject("confirmPassword", client.getConfirmPassword());
+        mv.addObject("client", client);
+        return mv;
+    }
+
+    @PostMapping("/edit-ClientProfile")
+    public ModelAndView editClient(Client client){
+        System.out.println("Editing client: " + client.toString());
+        ModelAndView mv = new ModelAndView("client/editClientProfile");
+        clientRepository.save(client);
+        mv.addObject("message", "Registered successfully!");
+        return mv;
+    }
+
+    @GetMapping("/editClientPassword/{id}")
+    public ModelAndView editClientPassword(@PathVariable("id") Integer id) {
+        ModelAndView mv = new ModelAndView("client/editClientPassword");
+        Client client = clientRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Client not found"));
+        mv.addObject("client", client);
+        return mv;
+    }
+
+    @PostMapping("/edit-ClientPassword")
+    public ModelAndView editClientPassword(@RequestParam("id") Integer id, @RequestParam("password") String password, @RequestParam("confirmPassword") String confirmPassword) {
+        ModelAndView mv = new ModelAndView("client/editClientPassword");
+        clientService.updatePassword(id, password);
+        clientService.updateConfirmPassword(id, confirmPassword);
+
+        Client client = clientRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Client not found"));
+        mv.addObject("client", client);
+
+        mv.addObject("message", "Password changed successfully!");
+        return mv;
+    }
+
+    @GetMapping("/editBooking-Client/{id}")
+    public ModelAndView editBookingClient(@PathVariable("id") Integer id) {
+        ModelAndView mv = new ModelAndView("client/editBooking-Client");
+        Client client = clientRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Client not found"));
+        mv.addObject("client", client);
+        return mv;
+    }
+
+    @PostMapping("/edit-BookingClient")
+    public ModelAndView editBookingClient(Client client){
+        System.out.println("Editing client: " + client.toString());
+        ModelAndView mv = new ModelAndView("client/editBooking-Client");
+        clientRepository.save(client);
+        return mv;
+    }
+
+    @GetMapping("/editVehicleClient/{id}")
+    public ModelAndView editVehiclesClient(@PathVariable("id") Integer id, Model model) {
+        ModelAndView mv = new ModelAndView("client/editVehicleClient");
+        Vehicle vehicle = vehicleRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Vehicle not found"));
+
+        List<Client> clientList = clientRepository.findAll();
+        model.addAttribute("client", clientList);
+
+        mv.addObject("vehicle", vehicle);
+        return mv;
+    }
+
+    @PostMapping("/editVehicleClient")
+    public ModelAndView saveEditVehiclesClient(Vehicle vehicle){
+        System.out.println("Editing vehicle: " + vehicle.toString());
+        ModelAndView mv = new ModelAndView("client/editVehicleClient");
+        vehicleRepository.save(vehicle);
+        return mv;
+    }
+
+    @GetMapping("/addVehicles-Client")
+    public ModelAndView newVehicle(@ModelAttribute("vehicle") VehicleDto vehicleDto, Model model, Principal principal){
+        ModelAndView mv = new ModelAndView("client/addVehicle-Client");
+
+        List<Client> clientList = clientRepository.findAll();
+        model.addAttribute("client", clientList);
+
+        String clientEmail = principal.getName();
+        Client client = clientRepository.findByEmail(clientEmail);
+        if(client != null){
+            List<Booking> bookingList = bookingRepository.findByClient(client);
+            mv.addObject("bookingList", bookingList);
+        } else {
+            mv.addObject("bookingList", Collections.emptyList());
+        }
+        return mv;
+    }
+
+    @PostMapping("/new-VehicleClient")
+    public ModelAndView saveNewVehicle(@ModelAttribute("vehicle") VehicleDto vehicleDto, Model model) {
+        ModelAndView mv = new ModelAndView("client/addVehicle-Client");
+        vehicleService.save(vehicleDto);
+        mv.addObject("message", "Registered successfully!");
+
+        return mv;
+    }
+
 }

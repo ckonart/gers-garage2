@@ -187,6 +187,7 @@
             <label for="img">Profile image</label>
             <input type="file" id="img" name="file" placeholder="Choose file">
         </div>
+        <input type="hidden" th:field="*{role}" value="${clientDto.role}">
 
         <input type="submit" value="Register">
     </form>
