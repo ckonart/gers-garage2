@@ -49,6 +49,11 @@ public class BookingController {
     @PostMapping("/new-Booking")
     public ModelAndView saveBooking(@ModelAttribute("booking") BookingDto bookingDto) {
         ModelAndView mv = new ModelAndView("admin/addBooking");
+
+        if (!bookingService.isTimeSlotAvailable(bookingDto)) {
+            mv.addObject("error", "Selected time slot is not available. Please choose a different time.");
+            return mv;
+        }
         bookingService.save(bookingDto);
 
         // Debugging - print clientDto fields

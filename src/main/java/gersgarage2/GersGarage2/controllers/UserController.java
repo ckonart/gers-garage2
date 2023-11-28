@@ -8,11 +8,14 @@ import gersgarage2.GersGarage2.repositories.*;
 import gersgarage2.GersGarage2.service.*;
 import gersgarage2.GersGarage2.util.UploadUtil;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
@@ -22,6 +25,7 @@ import java.util.Collections;
 import java.util.List;
 
 @Controller
+@Validated
 public class UserController {
 
     @Autowired
@@ -62,8 +66,16 @@ public class UserController {
     }
 
     @PostMapping("/registration-user")
-    public ModelAndView saveUser(@ModelAttribute("user") ClientDto clientDto, @RequestParam("file") MultipartFile file) {
+    public ModelAndView saveUser(@ModelAttribute("user") @Valid ClientDto clientDto, BindingResult bindingResult, @RequestParam("file") MultipartFile file) {
         ModelAndView mv = new ModelAndView("admin/registerUser");
+
+        if (bindingResult.hasErrors()) {
+            return mv;
+        }
+        if (!clientDto.getPassword().equals(clientDto.getConfirmPassword())) {
+            mv.addObject("passwordMismatch", "Passwords do not match");
+            return mv;
+        }
 
         String imgFilePath = UploadUtil.uploadImg(file);
 
@@ -74,7 +86,7 @@ public class UserController {
             mv.addObject("message", "File upload failed");
         }
 
-        if (clientDto.getRole() == Role.STAFF) {
+        if (clientDto.getRole() == Role.STAFF || (clientDto.getPassword().equals(clientDto.getConfirmPassword()))) {
             staffService.save(clientDto);
         } else if (clientDto.getRole() == Role.CLIENT) {
             clientService.save(clientDto);
@@ -82,7 +94,6 @@ public class UserController {
             adminService.save(clientDto);
         }
 
-        // Debugging - print clientDto fields
         System.out.println("First Name: " + clientDto.getFirstName());
         System.out.println("Last Name: " + clientDto.getLastName());
         System.out.println("Email: " + clientDto.getEmail());
@@ -222,9 +233,9 @@ public class UserController {
 
         return mv;
     }
-    @GetMapping("/listClientVehicles")
+    @GetMapping("/listVehicle")
     public ModelAndView vehicleListClient(){
-        ModelAndView mv = new ModelAndView("client/listClientVehicles");
+        ModelAndView mv = new ModelAndView("admin/listVehicle");
         mv.addObject("vehicle", vehicleRepository.findAll());
         return mv;
     }

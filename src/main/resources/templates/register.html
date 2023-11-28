@@ -148,10 +148,12 @@
         <div class="form-group">
             <label for="firstName">First name:</label>
             <input th:field="*{firstName}" type="text" id="firstName" name="firstName" placeholder="First Name" required>
+            <span id="firstNameError" style="color: red"></span>
         </div>
         <div class="form-group">
             <label for="lastName">Last name:</label>
             <input th:field="*{lastName}" type="text" id="lastName" name="lastName" placeholder="Last Name" required>
+            <span id="lastNameError" style="color: red"></span>
         </div>
 
         <div class="form-group">
@@ -161,15 +163,18 @@
 
         <div class="form-group">
             <label for="password">Password:</label>
-            <input th:field="*{password}" type="password" id="password" name="password" placeholder="Password" required>
+            <input type="password" id="password" name="password" placeholder="Password" required>
+            <span id="passwordError" style="color: red"></span>
         </div>
         <div class="form-group">
             <label for="confirmPassword">Confirm password:</label>
-            <input th:field="*{confirmPassword}" type="password" id="confirmPassword" name="confirmPassword" placeholder="Re-enter Password" required>
+            <input type="password" id="confirmPassword" name="confirmPassword" placeholder="Re-enter Password" required>
+            <span id="confirmPasswordError" style="color: red"></span>
         </div>
         <div class="form-group">
             <label for="phoneNumber">Phone number:</label>
             <input th:field="*{phoneNumber}" type="text" id="phoneNumber" name="phoneNumber" placeholder="Phone Number" required>
+            <span id="phoneNumberError" style="color: red"></span>
         </div>
         <div class="form-group">
             <label for="gender">Gender:</label>
@@ -189,11 +194,122 @@
         </div>
         <input type="hidden" th:field="*{role}" value="${clientDto.role}">
 
-        <input type="submit" value="Register">
+        <input type="submit" id="submitButton" value="Register">
+        <script>
+            const passwordInput = document.getElementById('password');
+            const passwordError = document.getElementById('passwordError');
+            const confirmPasswordInput = document.getElementById('confirmPassword');
+            const confirmPasswordError = document.getElementById('confirmPasswordError');
+            const phoneNumberInput = document.getElementById('phoneNumber');
+            const phoneNumberError = document.getElementById('phoneNumberError');
+            const firstNameInput = document.getElementById('firstName');
+            const firstNameError = document.getElementById('firstNameError');
+            const lastNameInput = document.getElementById('lastName');
+            const lastNameError = document.getElementById('lastNameError');
+            const submitButton = document.getElementById('submitButton');
+
+            passwordInput.addEventListener('keyup', validatePassword);
+            confirmPasswordInput.addEventListener('input', validatePassword);
+            phoneNumberInput.addEventListener('input', validatePhoneNumber);
+            firstNameInput.addEventListener('input', validateFirstName);
+            lastNameInput.addEventListener('input', validateLastName);
+
+            function validatePassword() {
+                const password = passwordInput.value;
+                const confirmPassword = confirmPasswordInput.value;
+
+                if (password.length >= 6) {
+                    passwordError.textContent = '';
+                } else {
+                    passwordError.textContent = 'Password must be at least 6 characters long';
+                    submitButton.disabled = true;
+                }
+
+                if (password.match(/[a-z]/)) {
+                    passwordError.textContent = '';
+                } else {
+                    passwordError.textContent = 'Password must contain at least one lowercase letter';
+                    submitButton.disabled = true;
+                }
+
+                if (password.match(/[A-Z]/)) {
+                    passwordError.textContent = '';
+                } else {
+                    passwordError.textContent = 'Password must contain at least one uppercase letter';
+                    submitButton.disabled = true;
+                }
+
+                if (password.match(/[0-9]/)) {
+                    passwordError.textContent = '';
+                } else {
+                    passwordError.textContent = 'Password must contain at least one digit';
+                    submitButton.disabled = true;
+                }
+
+                if (password.match(/[!@#$%^&*()_+={}]/)) {
+                    passwordError.textContent = '';
+                } else {
+                    passwordError.textContent = 'Password must contain at least one special character';
+                    submitButton.disabled = true;
+                }
+
+                if (password === confirmPassword) {
+                    confirmPasswordError.textContent = '';
+                } else {
+                    confirmPasswordError.textContent = 'Passwords do not match';
+                    submitButton.disabled = true;
+                }
+
+                submitButton.disabled = passwordError.textContent !== '' || confirmPasswordError.textContent !== '';
+            }
+
+            function validatePhoneNumber() {
+                const phoneNumber = phoneNumberInput.value.replace(/\s/g, '');
+
+                if (/^\d{9}$/.test(phoneNumber)) {
+                    phoneNumberError.textContent = '';
+                } else {
+                    phoneNumberError.textContent = 'Phone number must be 9 digits long';
+                    submitButton.disabled = true;
+                    return;
+                }
+
+                if (/^[0-9]+$/.test(phoneNumber)) {
+                    phoneNumberError.textContent = '';
+                    submitButton.disabled = false;
+                } else {
+                    phoneNumberError.textContent = 'Phone number must contain only numbers';
+                    submitButton.disabled = true;
+                }
+            }
+
+            function validateFirstName() {
+                const firstName = firstNameInput.value.replace(/\s/g, '').toLowerCase();
+
+                if (/^[a-z]+$/.test(firstName)) {
+                    firstNameError.textContent = '';
+                    submitButton.disabled = false;
+                } else {
+                    firstNameError.textContent = 'Your name must contain only letters';
+                    submitButton.disabled = true;
+                }
+            }
+
+            function validateLastName() {
+                const lastName = lastNameInput.value.replace(/\s/g, '').toLowerCase();
+
+                if (/^[a-z]+$/.test(lastName)) {
+                    lastNameError.textContent = '';
+                    submitButton.disabled = false;
+                } else {
+                    lastNameError.textContent = 'Your surname must contain only letters';
+                    submitButton.disabled = true;
+                }
+            }
+
+        </script>
     </form>
-
 </div>
-
 <!-- Service End -->
 
 <!-- Footer Start -->

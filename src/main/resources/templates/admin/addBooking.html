@@ -185,8 +185,11 @@
             </div>
         </div>
     </div>
-    <div class="message" th:if="${message != null}">
+    <div class="message" th:if="${message != null }">
         [[${message}]]
+    </div>
+    <div class="error" th:if="${error != null}">
+        [[${error}]]
     </div>
     <form method="post" th:action="@{/new-Booking}" role="form" th:object="${booking}">
 
@@ -290,6 +293,9 @@
 
         <input type="submit" value="Submit">
     </form>
+</div>
+<div class="text-center mt-5">
+    <a th:href="@{/services}" class="btn btn-secondary">Back</a>
 </div>
 <!-- Service End -->
 
