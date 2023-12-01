@@ -10,6 +10,7 @@ import gersgarage2.GersGarage2.util.UploadUtil;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Controller;
@@ -69,44 +70,36 @@ public class UserController {
     public ModelAndView saveUser(@ModelAttribute("user") @Valid ClientDto clientDto, BindingResult bindingResult, @RequestParam("file") MultipartFile file) {
         ModelAndView mv = new ModelAndView("admin/registerUser");
 
-        if (bindingResult.hasErrors()) {
-            return mv;
+        try {
+            if (bindingResult.hasErrors()) {
+                return mv;
+            }
+            if (!clientDto.getPassword().equals(clientDto.getConfirmPassword())) {
+                mv.addObject("passwordMismatch", "Passwords do not match");
+                return mv;
+            }
+
+            String imgFilePath = UploadUtil.uploadImg(file);
+
+            if (imgFilePath != null) {
+                clientDto.setImg(file.getOriginalFilename());
+                mv.addObject("message", "File upload successfully");
+            } else {
+                mv.addObject("message", "File upload failed");
+            }
+
+            if (clientDto.getRole() == Role.STAFF || (clientDto.getPassword().equals(clientDto.getConfirmPassword()))) {
+                staffService.save(clientDto);
+            } else if (clientDto.getRole() == Role.CLIENT) {
+                clientService.save(clientDto);
+            } else if (clientDto.getRole() == Role.ADMIN) {
+                adminService.save(clientDto);
+            }
+
+            mv.addObject("message", "Registered successfully!");
+        } catch (DataIntegrityViolationException e) {
+            mv.addObject("error", "Email already exists in our system. Please choose a different email or click in 'forget password'.");
         }
-        if (!clientDto.getPassword().equals(clientDto.getConfirmPassword())) {
-            mv.addObject("passwordMismatch", "Passwords do not match");
-            return mv;
-        }
-
-        String imgFilePath = UploadUtil.uploadImg(file);
-
-        if (imgFilePath != null) {
-            clientDto.setImg(file.getOriginalFilename());
-            mv.addObject("message", "File upload successfully");
-        } else {
-            mv.addObject("message", "File upload failed");
-        }
-
-        if (clientDto.getRole() == Role.STAFF || (clientDto.getPassword().equals(clientDto.getConfirmPassword()))) {
-            staffService.save(clientDto);
-        } else if (clientDto.getRole() == Role.CLIENT) {
-            clientService.save(clientDto);
-        } else if (clientDto.getRole() == Role.ADMIN) {
-            adminService.save(clientDto);
-        }
-
-        System.out.println("First Name: " + clientDto.getFirstName());
-        System.out.println("Last Name: " + clientDto.getLastName());
-        System.out.println("Email: " + clientDto.getEmail());
-        System.out.println("Password: " + clientDto.getPassword());
-        System.out.println("Confirm Pwd: " + clientDto.getConfirmPassword());
-        System.out.println("Phone number: " + clientDto.getPhoneNumber());
-        System.out.println("Gender: " + clientDto.getGender());
-        System.out.println("Dob: " + clientDto.getDob());
-        System.out.println("Img: " + clientDto.getImg());
-        System.out.println("Role: " + clientDto.getRole());
-
-        mv.addObject("message", "Registered successfully!");
-
         return mv;
     }
 

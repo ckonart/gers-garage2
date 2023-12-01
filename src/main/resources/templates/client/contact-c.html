@@ -1,6 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org"
-      xmlns: sec="http://www.thymeleaf.org/extras/spring-security" xmlns:sec="http://www.w3.org/1999/xhtml">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 
 <head>
     <meta charset="utf-8">
@@ -160,12 +159,12 @@
     <div class="container-fluid page-header mb-5 p-0" style="background-image: url(img/carousel-bg-1.jpg);">
         <div class="container-fluid page-header-inner py-5">
             <div class="container text-center">
-                <h1 class="display-3 text-white mb-3 animated slideInDown">User area</h1>
+                <h1 class="display-3 text-white mb-3 animated slideInDown">Contact</h1>
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb justify-content-center text-uppercase">
                         <li class="breadcrumb-item"><a href="#">Home</a></li>
                         <li class="breadcrumb-item"><a href="#">Pages</a></li>
-                        <li class="breadcrumb-item text-white active" aria-current="page">User area</li>
+                        <li class="breadcrumb-item text-white active" aria-current="page">Contact</li>
                     </ol>
                 </nav>
             </div>
@@ -174,101 +173,73 @@
     <!-- Page Header End -->
 
 
-    <div class="header">
-        <h1>Client Dashboard</h1>
-    </div>
-    <div class="container">
-        <h2>Welcome, [[${user.getFullName}]]</h2>
-
-        <span sec:authorize="isAuthenticated">
-        <a th:href="@{/logout}">
-         Logout
-
-        </a>
-
-        </span>
-
-    </div>
-
-    <!-- User Menu Start -->
+    <!-- Contact Start -->
     <div class="container-xxl py-5">
         <div class="container">
-            <div class="row g-4">
-                <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
-                    <div class="d-flex py-5 px-4">
-                        <i class="fa fa-certificate fa-3x text-primary flex-shrink-0"></i>
-                        <div class="ps-4">
-                            <h5 class="mb-3">Personal information</h5>
-                            <p style="text-align: justify;">Keep your personal information updated here!</p>
-                            <a class="text-secondary border-bottom" th:href="@{/personalInfo}">Read more</a>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.3s">
-                    <div class="d-flex bg-light py-5 px-4">
-                        <i class="fa fa-users-cog fa-3x text-primary flex-shrink-0"></i>
-                        <div class="ps-4">
-                            <h5 class="mb-3">Services</h5>
-                            <p style="text-align: justify;">Book a service or see your record of services with us!</p>
-                            <a class="text-secondary border-bottom" th:href="@{/bookingPage-Client}">Read More</a>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.5s">
-                    <div class="d-flex py-5 px-4">
-                        <i class="fa fa-tools fa-3x text-primary flex-shrink-0"></i>
-                        <div class="ps-4">
-                            <h5 class="mb-3">Complaints or suggestions?</h5>
-                            <p style="text-align: justify;">Something it is still wrong or have some good words us? Please let us know!</p>
-                            <a class="text-secondary border-bottom" th:href="@{/support}">Read More</a>
-                        </div>
-                    </div>
-                </div>
+            <div class="text-center wow fadeInUp" data-wow-delay="0.1s">
+                <h6 class="text-primary text-uppercase">// Contact Us //</h6>
+                <h1 class="mb-5">Contact For Any Query</h1>
             </div>
-        </div>
-    </div>
-    <!-- User Menu End -->
-
-
-    <!-- Booking Start -->
-    <div class="container-fluid bg-secondary booking my-5 wow fadeInUp" data-wow-delay="0.1s">
-        <div class="container">
-            <div class="row gx-5">
-                <div class="col-lg-6 py-5">
-                    <div class="py-5">
-                        <h1 class="text-white mb-4">Certified and Award Winning Service Provider</h1>
-                        <p class="text-white mb-0">Insert beside what service are you interested in and what date to check availability.</p>
+            <div class="row g-4">
+                <div class="col-12">
+                    <div class="row gy-4">
+                        <div class="col-md-4">
+                            <div class="bg-light d-flex flex-column justify-content-center p-4">
+                                <h5 class="text-uppercase">// Booking //</h5>
+                                <p class="m-0"><i class="fa fa-envelope-open text-primary me-2"></i>bookinggg@gmail.com</p>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="bg-light d-flex flex-column justify-content-center p-4">
+                                <h5 class="text-uppercase">// General //</h5>
+                                <p class="m-0"><i class="fa fa-envelope-open text-primary me-2"></i>gers_garage@gmail.com</p>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="bg-light d-flex flex-column justify-content-center p-4">
+                                <h5 class="text-uppercase">// Sales //</h5>
+                                <p class="m-0"><i class="fa fa-envelope-open text-primary me-2"></i>salesgg@gmail.com</p>
+                            </div>
+                        </div>
                     </div>
                 </div>
-                <div class="col-lg-6">
-                    <div class="bg-primary h-100 d-flex flex-column justify-content-center text-center p-5 wow zoomIn" data-wow-delay="0.6s">
-                        <h1 class="text-white mb-4">Check availability</h1>
+                <div class="col-md-6 wow fadeIn" data-wow-delay="0.1s">
+                    <iframe class="position-relative rounded w-100 h-100"
+                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2380.9054752733664!2d-6.243358023476859!3d53.362846572294124!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x48670e5dd56ab2e1%3A0x53de956e36256295!2s57%20Fairview%20Strand%2C%20Fairview%2C%20Dublin%203%2C%20D03%20W7P4!5e0!3m2!1sen!2sie!4v1691532493277!5m2!1sen!2sie"
+                        frameborder="0" style="min-height: 350px; border:0;" allowfullscreen="" aria-hidden="false"
+                        tabindex="0"></iframe>
+                </div>
+                <div class="col-md-6">
+                    <div class="wow fadeInUp" data-wow-delay="0.2s">
+                        <p class="mb-4">If you still have any doubts about what we can do for you and your vehicle don't be afraid to give us a call or send an e-mail using the field below. As soon as we can we'll be in touch to help you the best way we can.</p>
                         <form>
                             <div class="row g-3">
-                                <div class="col-12 col-sm-6">
-                                    <select class="form-select border-0" style="height: 55px;">
-                                        <option selected>Select A Service</option>
-                                        <option value="1">Major Repair</option>
-                                        <option value="2">Minor Repair</option>
-                                        <option value="3">Major Service</option>
-                                        <option value="4">Annual Service</option>
-                                        <option value="5">Detailing</option>
-                                    </select>
+                                <div class="col-md-6">
+                                    <div class="form-floating">
+                                        <input type="text" class="form-control" id="name" placeholder="Your Name">
+                                        <label for="name">Your Name</label>
+                                    </div>
                                 </div>
-                                <div class="col-12 col-sm-6">
-                                    <div class="date" id="date1" data-target-input="nearest">
-                                        <input type="text"
-                                            class="form-control border-0 datetimepicker-input"
-                                            placeholder="Service Date" data-target="#date1" data-toggle="datetimepicker" style="height: 55px;">
+                                <div class="col-md-6">
+                                    <div class="form-floating">
+                                        <input type="email" class="form-control" id="email" placeholder="Your Email">
+                                        <label for="email">Your Email</label>
                                     </div>
                                 </div>
                                 <div class="col-12">
-                                    <div class="date" id="timeSlotPicker" data-target-input="nearest">
-                                        <input type="text" class="form-control border-0 datetimepicker-input" placeholder="Select Time Slot" data-target="#timeSlotPicker" data-toggle="datetimepicker" style="height: 55px;">
+                                    <div class="form-floating">
+                                        <input type="text" class="form-control" id="subject" placeholder="Subject">
+                                        <label for="subject">Subject</label>
                                     </div>
                                 </div>
                                 <div class="col-12">
-                                    <button class="btn btn-secondary w-100 py-3" type="submit">Book Now</button>
+                                    <div class="form-floating">
+                                        <textarea class="form-control" placeholder="Leave a message here" id="message" style="height: 100px"></textarea>
+                                        <label for="message">Message</label>
+                                    </div>
+                                </div>
+                                <div class="col-12">
+                                    <button class="btn btn-primary w-100 py-3" type="submit">Send Message</button>
                                 </div>
                             </div>
                         </form>
@@ -277,28 +248,7 @@
             </div>
         </div>
     </div>
-    <!-- Booking End -->
-
-
-    <!-- Call To Action Start -->
-    <div class="container-xxl py-5 wow fadeInUp" data-wow-delay="0.1s">
-        <div class="container">
-            <div class="row g-4">
-                <div class="col-lg-8 col-md-6">
-                    <h6 class="text-primary text-uppercase">// Call To Action //</h6>
-                    <h1 class="mb-4">Have any pre-booking question?</h1>
-                    <p class="mb-0">If you still have any question about our service dont't be shy and give us a call! We'll more than glad in help you and your vehicle.</p>
-                </div>
-                <div class="col-lg-4 col-md-6">
-                    <div class="bg-primary d-flex flex-column justify-content-center text-center h-100 p-4">
-                        <h3 class="text-white mb-4"><i class="fa fa-phone-alt me-3"></i>+353 83 113 6867</h3>
-                        <a href="../contact.html" class="btn btn-secondary py-3 px-5">Contact Us<i class="fa fa-arrow-right ms-3"></i></a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- Call To Action End -->
+    <!-- Contact End -->
 
 
     <!-- Footer Start -->
@@ -326,11 +276,11 @@
                 </div>
                 <div class="col-lg-3 col-md-6">
                     <h4 class="text-light mb-4">Services</h4>
-                    <a class="btn btn-link" href="../service.html">Annual Service</a>
-                    <a class="btn btn-link" href="../service.html">Major Service</a>
-                    <a class="btn btn-link" href="../service.html">Repair</a>
-                    <a class="btn btn-link" href="../service.html">Major Repair</a>
-                    <a class="btn btn-link" href="../wash.html">Detailing</a>
+                    <a class="btn btn-link" href="service.html">Annual Service</a>
+                    <a class="btn btn-link" href="service.html">Major Service</a>
+                    <a class="btn btn-link" href="service.html">Repair</a>
+                    <a class="btn btn-link" href="service.html">Major Repair</a>
+                    <a class="btn btn-link" href="wash.html">Detailing</a>
                 </div>
                 <div class="col-lg-3 col-md-6">
                     <h4 class="text-light mb-4">Newsletter</h4>
@@ -388,7 +338,6 @@
 
     <!-- Template Javascript -->
     <script src="js/main.js"></script>
-
 </body>
 
 </html>

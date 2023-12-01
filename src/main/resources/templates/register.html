@@ -143,6 +143,9 @@
     <div class="message" th:if="${message != null}">
         [[${message}]]
     </div>
+    <div class="message" th:if="${error != null}">
+        [[${error}]]
+    </div>
     <h2>Registration Form</h2>
     <form th:action="@{/registration}" method="post" role="form" th:object="${client}" enctype="multipart/form-data">
         <div class="form-group">

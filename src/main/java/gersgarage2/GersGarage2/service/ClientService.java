@@ -13,6 +13,8 @@ public interface ClientService {
 
     Client save(ClientDto clientDto);
 
+    public boolean isEmailUnique(String email);
+
     Client updatePassword(Integer id, String password);
     Client updateConfirmPassword(Integer id, String confirmPassword);
 

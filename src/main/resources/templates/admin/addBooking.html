@@ -130,8 +130,8 @@
 
     <div class="collapse navbar-collapse" id="navbarCollapse">
         <div class="navbar-nav ms-auto p-4 p-lg-0">
-            <a th:href="@{/adminpage}" class="nav-item nav-link active">Home</a>
-            <a th:href="@{/about}" class="nav-item nav-link">Profiles</a>
+            <a th:href="@{/adminpage}" class="nav-item nav-link active">Dashboard</a>
+            <a th:href="@{/about}" class="nav-item nav-link">About</a>
             <a th:href="@{/shop}" class="nav-item nav-link">Shop</a>
             <div class="nav-item dropdown">
                 <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Services</a>
@@ -191,7 +191,10 @@
     <div class="error" th:if="${error != null}">
         [[${error}]]
     </div>
-    <form method="post" th:action="@{/new-Booking}" role="form" th:object="${booking}">
+    <div class="errorDate" th:if="${errorDate != null}">
+        [[${errorDate}]]
+    </div>
+    <form method="post" th:action="@{/addBooking}" role="form" th:object="${booking}">
 
 
         <div class="form-group">
@@ -264,7 +267,7 @@
         <div class="form-group">
             <label for="staffSelection">Mechanic selection:</label>
             <select class="form-control" id="staffSelection" th:field="*{staff.id}" required>
-                <option th:each="staff : ${staff}" th:text="${staff.firstName + ' ' + staff.lastName}" th:value="${staff.id}"></option>
+                <option th:each="mechanic : ${staffList}" th:text="${mechanic.firstName + ' ' + mechanic.lastName}" th:value="${mechanic.id}"></option>
             </select>
         </div>
         <div class="form-group">

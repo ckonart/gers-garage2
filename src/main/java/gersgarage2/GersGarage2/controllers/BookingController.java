@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.security.Principal;
+import java.time.LocalDate;
 import java.util.Collections;
 import java.util.List;
 
@@ -42,28 +43,38 @@ public class BookingController {
         List<Client> clientList = clientRepository.findAll();
         List<Staff> staffList = staffRepository.findAll();
         model.addAttribute("client", clientList);
-        model.addAttribute("staff", staffList);
+        model.addAttribute("staffList", staffList);
         return "admin/addBooking";
     }
 
-    @PostMapping("/new-Booking")
-    public ModelAndView saveBooking(@ModelAttribute("booking") BookingDto bookingDto) {
+    @PostMapping("/addBooking")
+    public ModelAndView saveBooking(@ModelAttribute("booking") BookingDto bookingDto, Model model) {
         ModelAndView mv = new ModelAndView("admin/addBooking");
+
+        List<Client> clientList = clientRepository.findAll();
+        model.addAttribute("client", clientList);
+        List<Staff> staffList = staffRepository.findAll();
+        model.addAttribute("staffList", staffList);
+
+        if (bookingDto.getDateService() == null || bookingDto.getDateService().trim().isEmpty()) {
+            mv.addObject("errorDate", "Please provide a date to register a new booking with us");
+            return mv;
+        }
+
+        LocalDate currentDate = LocalDate.now();
+        LocalDate selectedDate = LocalDate.parse(bookingDto.getDateService());
+
+        if (selectedDate.isBefore(currentDate.plusDays(1))) {
+            mv.addObject("errorDate", "Selected date must be at least one day from today.");
+            return mv;
+        }
 
         if (!bookingService.isTimeSlotAvailable(bookingDto)) {
             mv.addObject("error", "Selected time slot is not available. Please choose a different time.");
             return mv;
         }
+
         bookingService.save(bookingDto);
-
-        // Debugging - print clientDto fields
-        System.out.println("Cost: " + bookingDto.getCostService());
-        System.out.println("Start date: " + bookingDto.getDateService());
-        System.out.println("Start time: " + bookingDto.getStartTime());
-        System.out.println("Details: " + bookingDto.getDetails());
-        System.out.println("Service type: " + bookingDto.getServiceType());
-        System.out.println("Status: " + bookingDto.getStatus());
-
         mv.addObject("message", "Registered successfully!");
 
         return mv;
@@ -118,13 +129,34 @@ public class BookingController {
     @GetMapping("/addBooking-Client")
     public String bookingClient(@ModelAttribute("booking") BookingDto bookingDto, Model model){
         List<Staff> staffList = staffRepository.findAll();
-        model.addAttribute("staff", staffList);
+        model.addAttribute("staffList", staffList);
         return "client/addBooking-Client";
     }
 
-    @PostMapping("/new-BookingClient")
-    public ModelAndView saveBookingClient(@ModelAttribute("booking") BookingDto bookingDto, Principal principal) {
+    @PostMapping("/addBooking-Client")
+    public ModelAndView saveBookingClient(@ModelAttribute("booking") BookingDto bookingDto, Principal principal, Model model) {
         ModelAndView mv = new ModelAndView("client/addBooking-Client");
+
+        List<Staff> staffList = staffRepository.findAll();
+        model.addAttribute("staffList", staffList);
+
+        if (bookingDto.getDateService() == null || bookingDto.getDateService().trim().isEmpty()) {
+            mv.addObject("errorDate", "Please provide a date to register a new booking with us");
+            return mv;
+        }
+
+        LocalDate currentDate = LocalDate.now();
+        LocalDate selectedDate = LocalDate.parse(bookingDto.getDateService());
+
+        if (selectedDate.isBefore(currentDate.plusDays(1))) {
+            mv.addObject("errorDate", "Selected date must be at least one day from today.");
+            return mv;
+        }
+
+        if (!bookingService.isTimeSlotAvailable(bookingDto)) {
+            mv.addObject("error", "Selected time slot is not available. Please choose a different time.");
+            return mv;
+        }
 
         String clientEmail = principal.getName();
         Client client = clientRepository.findByEmail(clientEmail);

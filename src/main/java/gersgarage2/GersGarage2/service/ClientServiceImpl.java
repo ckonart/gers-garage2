@@ -6,6 +6,7 @@ import gersgarage2.GersGarage2.models.Staff;
 import gersgarage2.GersGarage2.repositories.ClientRepository;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -23,8 +24,16 @@ public class ClientServiceImpl implements ClientService {
 
     @Override
     public Client save(ClientDto clientDto) {
-        Client client = convertToClient(clientDto);
-        return clientRepository.save(client);
+        try {
+            Client client = convertToClient(clientDto);
+            return clientRepository.save(client);
+        } catch (DataIntegrityViolationException e) {
+            throw new DataIntegrityViolationException("Email already exists", e);
+        }
+    }
+
+    public boolean isEmailUnique(String email) {
+        return clientRepository.findByEmail(email) == null;
     }
 
     @Override

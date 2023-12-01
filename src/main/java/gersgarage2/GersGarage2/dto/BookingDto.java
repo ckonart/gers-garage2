@@ -5,19 +5,31 @@ import gersgarage2.GersGarage2.enumerates.ServiceType;
 import gersgarage2.GersGarage2.models.Client;
 import gersgarage2.GersGarage2.models.Staff;
 import gersgarage2.GersGarage2.models.Vehicle;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
 public class BookingDto {
 
+    @NotNull
     private ServiceType serviceType;
+    @NotNull
     private BookingStatus status;
+    @NotBlank
     private String dateService;
+    @NotBlank
     private String startTime;
+    @NotBlank
     private String details;
     private Double costService;
+
     private Double extraCost;
+    @NotBlank
     private Double totalCost;
+    @NotBlank
     private Staff staff;
+    @NotBlank
     private Client client;
+    @NotBlank
     private Vehicle vehicle;
 
     public BookingDto(ServiceType serviceType, BookingStatus status, String dateService, String startTime, String details, Double costService, Double extraCost, Double totalCost, Client client, Vehicle vehicle, Staff staff) {

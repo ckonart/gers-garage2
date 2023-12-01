@@ -188,7 +188,13 @@
     <div class="message" th:if="${message != null}">
         [[${message}]]
     </div>
-    <form method="post" th:action="@{/new-BookingClient}" role="form" th:object="${booking}">
+    <div class="error" th:if="${error != null}">
+        [[${error}]]
+    </div>
+    <div class="errorDate" th:if="${errorDate != null}">
+        [[${errorDate}]]
+    </div>
+    <form method="post" th:action="@{/addBooking-Client}" role="form" th:object="${booking}">
 
         <div class="form-group">
             <label for="serviceType">Book a service:</label>
@@ -237,16 +243,7 @@
                 <option value="15:00">3:00 PM</option>
             </select>
         </div>
-        <div class="form-group">
-            <label for="status">Status of the service:</label>
-            <select class="form-control" th:field="*{status}" id="status" name="status" required>
-                <option value="BOOKED">Booked</option>
-                <option value="IN_SERVICE">In service</option>
-                <option value="FIXED">Fixed</option>
-                <option value="COLLECTED">Collected</option>
-                <option value="UNREPAIRABLE">Unrepairable</option>
-            </select>
-        </div>
+        <input type="hidden" th:field="*{status}" value="${bookingDto.status}">
         <div class="form-group">
             <label for="details">Details:</label>
             <input type="text" class="form-control" id="details" th:field="*{details}" placeholder="Describe with details...">
@@ -254,7 +251,7 @@
         <div class="form-group">
             <label for="staffSelection">Mechanic selection:</label>
             <select class="form-control" id="staffSelection" th:field="*{staff.id}" required>
-                <option th:each="staff : ${staff}" th:text="${staff.firstName + ' ' + staff.lastName}" th:value="${staff.id}"></option>
+                <option th:each="mechanic : ${staffList}" th:text="${mechanic.firstName + ' ' + mechanic.lastName}" th:value="${mechanic.id}"></option>
             </select>
         </div>
         <div class="form-group">
