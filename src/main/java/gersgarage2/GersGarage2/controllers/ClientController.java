@@ -219,4 +219,19 @@ public class ClientController {
         return mv;
     }
 
+    @GetMapping("/listClientVehicles")
+    public ModelAndView vehicleListClient(Principal principal){
+        ModelAndView mv = new ModelAndView("client/listClientVehicles");
+
+        String clientEmail = principal.getName();
+        Client client = clientRepository.findByEmail(clientEmail);
+        if(client != null){
+            List<Vehicle> vehicleList = vehicleRepository.findByClient(client);
+            mv.addObject("vehicleList", vehicleList);
+        } else {
+            mv.addObject("vehicleList", Collections.emptyList());
+        }
+        return mv;
+    }
+
 }
