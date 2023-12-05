@@ -221,7 +221,7 @@
             const lastNameError = document.getElementById('lastNameError');
             const submitButton = document.getElementById('submitButton');
 
-            passwordInput.addEventListener('keyup', validatePassword);
+            passwordInput.addEventListener('input', validatePassword);
             confirmPasswordInput.addEventListener('input', validatePassword);
             phoneNumberInput.addEventListener('input', validatePhoneNumber);
             firstNameInput.addEventListener('input', validateFirstName);
@@ -230,50 +230,46 @@
             function validatePassword() {
                 const password = passwordInput.value;
                 const confirmPassword = confirmPasswordInput.value;
+                let errors = [];
 
                 if (password.length >= 6) {
-                    passwordError.textContent = '';
+                    // passwordError.textContent = '';
                 } else {
-                    passwordError.textContent = 'Password must be at least 6 characters long';
-                    submitButton.disabled = true;
+                    errors.push('Password must be at least 6 characters long');
                 }
 
-                if (password.match(/[a-z]/)) {
-                    passwordError.textContent = '';
+                if (/[a-z]/.test(password)) {
+                    // passwordError.textContent = '';
                 } else {
-                    passwordError.textContent = 'Password must contain at least one lowercase letter';
-                    submitButton.disabled = true;
+                    errors.push('Password must contain at least one lowercase letter');
                 }
 
-                if (password.match(/[A-Z]/)) {
-                    passwordError.textContent = '';
+                if (/[A-Z]/.test(password)) {
+                    // passwordError.textContent = '';
                 } else {
-                    passwordError.textContent = 'Password must contain at least one uppercase letter';
-                    submitButton.disabled = true;
+                    errors.push('Password must contain at least one uppercase letter');
                 }
 
-                if (password.match(/[0-9]/)) {
-                    passwordError.textContent = '';
+                if (/\d/.test(password)) {
+                    // passwordError.textContent = '';
                 } else {
-                    passwordError.textContent = 'Password must contain at least one digit';
-                    submitButton.disabled = true;
+                    errors.push('Password must contain at least one digit');
                 }
 
-                if (password.match(/[!@#$%^&*()_+={}]/)) {
-                    passwordError.textContent = '';
+                if (/[!@#$%^&*()_+={}]/.test(password)) {
+                    // passwordError.textContent = '';
                 } else {
-                    passwordError.textContent = 'Password must contain at least one special character';
-                    submitButton.disabled = true;
+                    errors.push('Password must contain at least one special character');
                 }
 
                 if (password === confirmPassword) {
-                    confirmPasswordError.textContent = '';
+                    // confirmPasswordError.textContent = '';
                 } else {
-                    confirmPasswordError.textContent = 'Passwords do not match';
-                    submitButton.disabled = true;
+                    errors.push('Passwords do not match');
                 }
 
-                submitButton.disabled = passwordError.textContent !== '' || confirmPasswordError.textContent !== '';
+                passwordError.textContent = errors.join('\n');
+                submitButton.disabled = errors.length > 0;
             }
 
             function validatePhoneNumber() {

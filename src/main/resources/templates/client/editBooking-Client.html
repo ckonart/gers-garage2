@@ -177,7 +177,7 @@
 <!-- Service Start -->
 <div class="container">
     <h2>Edit Form</h2>
-    <form method="post" th:action="@{/edit-BookingClient}" th:object="${booking}" role="form" enctype="multipart/form-data">
+    <form method="post" th:action="@{/editBooking-Client}" th:object="${booking}" role="form" enctype="multipart/form-data">
         <div class="form-group">
             <label for="clientSelection">Client selection:</label>
             <select class="form-control" id="clientSelection" th:field="*{client.id}" required>

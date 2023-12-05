@@ -88,7 +88,7 @@ public class UserController {
                 mv.addObject("message", "File upload failed");
             }
 
-            if (clientDto.getRole() == Role.STAFF || (clientDto.getPassword().equals(clientDto.getConfirmPassword()))) {
+            if (clientDto.getRole() == Role.STAFF) {
                 staffService.save(clientDto);
             } else if (clientDto.getRole() == Role.CLIENT) {
                 clientService.save(clientDto);
@@ -149,7 +149,7 @@ public class UserController {
     @GetMapping("/deleteClient/{id}")
     public String deleteClients(@PathVariable("id") Integer id) {
         clientRepository.deleteById(id);
-        return "redirect:/listAll-clients"; // Redirect back to the list of clients
+        return "redirect:/listAll-clients";
     }
 
     @GetMapping("/editProfilesClients/{id}")
@@ -254,7 +254,7 @@ public class UserController {
     }
     @GetMapping("/deleteVehicle/{id}")
     public ModelAndView deleteVehicle(@PathVariable("id") Integer id) {
-        ModelAndView mv = new ModelAndView("redirect:/listVehicles");
+        ModelAndView mv = new ModelAndView("redirect:/listVehicle");
         vehicleRepository.deleteById(id);
         return mv;
     }

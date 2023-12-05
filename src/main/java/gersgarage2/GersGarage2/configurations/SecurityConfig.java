@@ -38,7 +38,7 @@ public class SecurityConfig {
 
                 .authorizeHttpRequests(request -> request
                         .requestMatchers("/adminpage", "/index-a", "/services", "/about-a", "/shop-a", "/service-a", "/wash-a", "/contact-a", "/staff-a", "/testimonial-a",
-                                "/addBooking", "/new-Booking", "/listBookings", "/editBookings/**", "/deleteBookings/**",
+                                "/addBooking", "/new-Booking", "/listBookings", "/editBookings/**", "/edit-Booking", "/editBookings", "/deleteBookings/**",
                                 "/profiles", "/registration-user", "/deleteClient/**", "/edit-Client", "/editProfilesClients/**", "/listAll-clients",
                                 "/listAll-admin", "/deleteAdmin/**", "/edit-Admin", "/editProfilesAdmin/**",
                                 "/edit-Staff", "/editProfilesStaff/**", "/deleteStaff/**", "/listAll-staff",
@@ -46,13 +46,13 @@ public class SecurityConfig {
                                 )
                         .hasAuthority("ADMIN")
                         .requestMatchers("/userpage", "/index-c", "/about-c", "/shop-c", "/service-c", "/wash-c", "/contact-c", "/staff-c", "/testimonial-c",
-                                "/registration-client", "/bookingPage-Client", "/personalInfo", "/addBooking-Client", "/new-BookingClient", "/editBooking-Client", "/deleteBooking-Client/**", "/listBooking-Client",
+                                "/registration-client", "/bookingPage-Client", "/personalInfo", "/addBooking-Client", "/new-BookingClient", "/editBooking-Client/**", "/deleteBooking-Client/**", "/listBooking-Client",
                                 "/editClientProfile/**", "/edit-ClientProfile", "/editClientPassword/**", "/edit-ClientPassword",
                                 "/addVehicles-Client", "/new-VehicleClient", "/listClientVehicles", "/editVehicleClient/**", "/editVehicleClient", "/deleteVehicleClient/**", "/listInvoicesClients")
                         .hasAuthority("CLIENT")
                         .requestMatchers("/staffpage")
                         .hasAuthority("STAFF")
-                        .requestMatchers("/css/**", "/img/**", "/js/**", "/lib/**", "/scss/**", "/registration", "/", "/about", "/home", "/shop", "/service", "/wash", "/contact", "/staff", "/testimonial")
+                        .requestMatchers("/css/**", "/img/**", "/js/**", "/lib/**", "/scss/**", "/registration", "/", "/about", "/home", "/shop", "/service", "/wash", "/contact", "/support", "/staff", "/testimonial")
                         .permitAll())
 
                 .formLogin(form -> form.loginPage("/").loginProcessingUrl("/login")

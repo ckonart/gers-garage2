@@ -161,4 +161,16 @@ public class Booking {
     public void setStaff(Staff staff) {
         this.staff = staff;
     }
+
+    @Override
+    public String toString() {
+        return "Booking{" +
+                "id=" + id +
+                ", serviceType=" + serviceType +
+                ", client=" + client +
+                ", vehicle=" + vehicle +
+                '}';
+    }
 }
+
+

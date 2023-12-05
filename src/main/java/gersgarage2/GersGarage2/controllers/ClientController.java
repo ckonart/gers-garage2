@@ -1,13 +1,16 @@
 package gersgarage2.GersGarage2.controllers;
 
+import gersgarage2.GersGarage2.dto.BookingDto;
 import gersgarage2.GersGarage2.dto.ClientDto;
 import gersgarage2.GersGarage2.dto.VehicleDto;
 import gersgarage2.GersGarage2.enumerates.Role;
 import gersgarage2.GersGarage2.models.Booking;
 import gersgarage2.GersGarage2.models.Client;
+import gersgarage2.GersGarage2.models.Staff;
 import gersgarage2.GersGarage2.models.Vehicle;
 import gersgarage2.GersGarage2.repositories.BookingRepository;
 import gersgarage2.GersGarage2.repositories.ClientRepository;
+import gersgarage2.GersGarage2.repositories.StaffRepository;
 import gersgarage2.GersGarage2.repositories.VehicleRepository;
 import gersgarage2.GersGarage2.service.ClientService;
 import gersgarage2.GersGarage2.service.VehicleService;
@@ -41,6 +44,8 @@ public class ClientController {
     private VehicleService vehicleService;
     @Autowired
     private BookingRepository bookingRepository;
+    @Autowired
+    private StaffRepository staffRepository;
 
 
     @GetMapping("/login")
@@ -154,23 +159,6 @@ public class ClientController {
         return mv;
     }
 
-    @GetMapping("/editBooking-Client/{id}")
-    public ModelAndView editBookingClient(@PathVariable("id") Integer id) {
-        ModelAndView mv = new ModelAndView("client/editBooking-Client");
-        Client client = clientRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Client not found"));
-        mv.addObject("client", client);
-        return mv;
-    }
-
-    @PostMapping("/edit-BookingClient")
-    public ModelAndView editBookingClient(Client client){
-        System.out.println("Editing client: " + client.toString());
-        ModelAndView mv = new ModelAndView("client/editBooking-Client");
-        clientRepository.save(client);
-        return mv;
-    }
-
     @GetMapping("/editVehicleClient/{id}")
     public ModelAndView editVehiclesClient(@PathVariable("id") Integer id, Model model) {
         ModelAndView mv = new ModelAndView("client/editVehicleClient");
@@ -193,20 +181,13 @@ public class ClientController {
     }
 
     @GetMapping("/addVehicles-Client")
-    public ModelAndView newVehicle(@ModelAttribute("vehicle") VehicleDto vehicleDto, Model model, Principal principal){
+    public ModelAndView newVehicle(@ModelAttribute("vehicle") VehicleDto vehicleDto, Model model, Principal principal) {
         ModelAndView mv = new ModelAndView("client/addVehicle-Client");
-
-        List<Client> clientList = clientRepository.findAll();
-        model.addAttribute("client", clientList);
 
         String clientEmail = principal.getName();
         Client client = clientRepository.findByEmail(clientEmail);
-        if(client != null){
-            List<Booking> bookingList = bookingRepository.findByClient(client);
-            mv.addObject("bookingList", bookingList);
-        } else {
-            mv.addObject("bookingList", Collections.emptyList());
-        }
+        model.addAttribute("client", client);
+
         return mv;
     }
 
@@ -234,4 +215,10 @@ public class ClientController {
         return mv;
     }
 
+    @GetMapping("/deleteVehicleClient/{id}")
+    public ModelAndView deleteVehicleClient(@PathVariable("id") Integer id) {
+        ModelAndView mv = new ModelAndView("redirect:/listClientVehicles");
+        vehicleRepository.deleteById(id);
+        return mv;
+    }
 }

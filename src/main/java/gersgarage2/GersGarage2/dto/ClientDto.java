@@ -21,7 +21,7 @@ public class ClientDto {
     private String confirmPassword;
     @NotBlank
     private String phoneNumber;
-    @NotBlank
+    @NotNull
     private Gender gender;
     @NotBlank
     private String dob;

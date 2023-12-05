@@ -1,9 +1,12 @@
 package gersgarage2.GersGarage2.controllers;
 
 import gersgarage2.GersGarage2.dto.BookingDto;
+import gersgarage2.GersGarage2.enumerates.BookingStatus;
+import gersgarage2.GersGarage2.enumerates.ServiceType;
 import gersgarage2.GersGarage2.models.Booking;
 import gersgarage2.GersGarage2.models.Client;
 import gersgarage2.GersGarage2.models.Staff;
+import gersgarage2.GersGarage2.models.Vehicle;
 import gersgarage2.GersGarage2.repositories.BookingRepository;
 import gersgarage2.GersGarage2.repositories.ClientRepository;
 import gersgarage2.GersGarage2.repositories.StaffRepository;
@@ -88,20 +91,29 @@ public class BookingController {
     }
 
     @GetMapping("/editBookings/{id}")
-    public ModelAndView editBooking(@PathVariable("id") Integer id) {
+    public ModelAndView editBooking(@PathVariable("id") Integer id, Model model) {
         ModelAndView mv = new ModelAndView("admin/editBookings");
+
+        List<Client> clientList = clientRepository.findAll();
+        model.addAttribute("client", clientList);
+        List<Staff> staffList = staffRepository.findAll();
+        model.addAttribute("staff", staffList);
+        model.addAttribute("serviceTypes", ServiceType.values());
+        model.addAttribute("BookingStatus", BookingStatus.values());
+
         Booking booking = bookingRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Booking not found"));
+                .orElseThrow(() -> new EntityNotFoundException("Vehicle not found"));
+
         mv.addObject("booking", booking);
         return mv;
     }
 
-    @PostMapping("/edit-Booking")
-    public ModelAndView editAdmin(Booking booking){
+    @PostMapping("/editBookings")
+    public ModelAndView saveEditBooking(Booking booking){
         System.out.println("Editing booking: " + booking.toString());
         ModelAndView mv = new ModelAndView("admin/editBookings");
         bookingRepository.save(booking);
-        return bookingsList();
+        return mv;
     }
 
     @GetMapping("/deleteBookings/{id}")
@@ -161,10 +173,41 @@ public class BookingController {
         String clientEmail = principal.getName();
         Client client = clientRepository.findByEmail(clientEmail);
         bookingDto.setClient(client);
+        bookingDto.setStatus(BookingStatus.BOOKED);
         bookingService.save(bookingDto);
 
         mv.addObject("message", "Registered successfully!");
 
+        return mv;
+    }
+
+    @GetMapping("/deleteBooking-Client/{id}")
+    public ModelAndView deleteBookingClient(@PathVariable("id") Integer id) {
+        ModelAndView mv = new ModelAndView("redirect:/listBooking-Client");
+        bookingRepository.deleteById(id);
+        return mv;
+    }
+
+    @GetMapping("/editBooking-Client/{id}")
+    public ModelAndView editBookingClient(@PathVariable("id") Integer id, Model model) {
+        ModelAndView mv = new ModelAndView("client/editBooking-Client");
+        Booking booking = bookingRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Client not found"));
+
+        List<Client> clientList = clientRepository.findAll();
+        model.addAttribute("client", clientList);
+        List<Staff> staffList = staffRepository.findAll();
+        model.addAttribute("staff", staffList);
+
+        mv.addObject("booking", booking);
+        return mv;
+    }
+
+    @PostMapping("/editBooking-Client/")
+    public ModelAndView saveEditBookingClient(Booking booking){
+        System.out.println("Editing booking: " + booking.toString());
+        ModelAndView mv = new ModelAndView("client/editBooking-Client");
+        bookingRepository.save(booking);
         return mv;
     }
 }

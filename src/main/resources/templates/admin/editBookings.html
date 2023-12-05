@@ -178,7 +178,7 @@
 <!-- Service Start -->
 <div class="container">
     <h2>Edit Form</h2>
-    <form method="post" th:action="@{/edit-Booking}" th:object="${booking}" role="form" enctype="multipart/form-data">
+    <form method="post" th:action="@{/editBookings}" th:object="${booking}" role="form" enctype="multipart/form-data">
         <input type="hidden" th:field="*{id}">
 
         <div class="form-group">
@@ -190,7 +190,7 @@
         <div class="form-group">
             <label for="typeService" class="lblClient">Book a service:</label>
             <select name="typeService" id="typeService" class="form-control" th:field="*{serviceType}">
-                <option th:each="type : ${typeService}" th:text="${type}" th:value="${type}"></option>
+                <option th:each="type : ${serviceTypes}" th:text="${type}" th:value="${type.name()}"></option>
             </select>
         </div>
         <div class="form-group">
@@ -232,8 +232,7 @@
         <div class="form-group">
             <label for="statusService">Status:</label>
             <select name="statusService" id="statusService" class="form-control" th:field="*{status}">
-                <option th:each="status : ${displayBookingStatus}" th:text="${status}" th:value="${status}"
-                        th:selected="${status=='BOOKED'}"></option>
+                <option th:each="status : ${BookingStatus}" th:text="${status.displayBookingStatus}" th:value="${status}"></option>
             </select>
         </div>
         <div class="form-group">
@@ -246,6 +245,30 @@
                 <option th:each="staff : ${staff}" th:text="${staff.firstName + ' ' + staff.lastName}" th:value="${staff.id}"></option>
             </select>
         </div>
+        <div class="form-group">
+            <label for="extraCost">Extra cost:</label>
+            <input type="number" class="form-control" id="extraCost" th:field="*{extraCost}" placeholder="Service extras costs">
+        </div>
+        <div class="form-group">
+            <label for="totalCost">Total cost:</label>
+            <input type="number" class="form-control" id="totalCost" th:field="*{totalCost}" placeholder="Total cost">
+        </div>
+        <script>
+    function updateTotalCost() {
+        var costService = parseFloat(document.getElementById('costService').value) || 0;
+        var extraCost = parseFloat(document.getElementById('extraCost').value) || 0;
+
+        var totalCost = costService + extraCost;
+
+        document.getElementById('totalCost').value = totalCost.toFixed(2);
+    }
+
+    document.getElementById('costService').addEventListener('input', updateTotalCost);
+    document.getElementById('extraCost').addEventListener('input', updateTotalCost);
+
+    updateTotalCost();
+</script>
+
         <input type="submit" value="Submit">
     </form>
 
